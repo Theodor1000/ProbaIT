@@ -34,12 +34,21 @@ async function initializeContactRequestsTable(sequelize) {
     await ContactRequest.sync();
 }
 
-async function getContactRequests(sortBy, order) {
+async function getContactRequests(sortBy, order, filterBy) {
     let contactRequests;
+
     if (sortBy === undefined || order === undefined) {
-        contactRequests = await ContactRequest.findAll();
+        if (filterBy === undefined) {
+            contactRequests = await ContactRequest.findAll();
+        } else {
+            contactRequests = await ContactRequest.findAll({where: filterBy});
+        }
     } else {
-        contactRequests = await ContactRequest.findAll({order: [[sortBy, order]]});
+        if (filterBy === undefined) {
+            contactRequests = await ContactRequest.findAll({order: [[sortBy, order]]});
+        } else {
+            contactRequests = await ContactRequest.findAll({where: filterBy, order: [[sortBy, order]]});
+        }
     }
     return JSON.stringify(contactRequests, null, 2);
 }

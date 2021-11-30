@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     const sortBy = req.query.sortBy;
     const order = req.query.order;
+    const filterBy = req.query.filterBy;
 
     if ((sortBy === undefined && order !== undefined) || (sortBy !== undefined && order === undefined)) {
         res.status(400).send('Both sortBy and order must be provided!');
@@ -21,7 +22,23 @@ router.get('/', async (req, res) => {
         return;
     }
 
-    const result = await getContactRequests(sortBy, order);
+    let filter = undefined;
+    if (filterBy !== undefined) {
+        try {
+            filter = JSON.parse(filterBy);
+        } catch (error) {
+            res.status(400).send('filterBy must be a JSON')
+            return;
+        }
+        const properties = Object.getOwnPropertyNames(filter);
+
+        if (!properties.every(elem => ['id', 'name', 'email', 'message', 'is_resolved'].includes(elem))) {
+            res.status(400).send('filterBy must only contain: name, email, id, is_resolved, message');
+            return;
+        }
+    }
+
+    const result = await getContactRequests(sortBy, order, filter);
     res.status(200).send(result);
 });
 
