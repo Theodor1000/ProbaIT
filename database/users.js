@@ -71,4 +71,27 @@ async function loginUser(email) {
     return result[0];
 }
 
-module.exports = {initializeUsersTable, registerUser, loginUser};
+async function getUsers() {
+    const result = await User.findAll();
+
+    const resultWithoutPassword = result.map(user => {
+        delete user.dataValues.password;
+        return user;
+    });
+
+    return JSON.stringify(resultWithoutPassword, null, 2);
+}
+
+async function getOneUser(id) {
+    const result = await User.findAll({where: {id}});
+    if (result.length === 0) {
+        return undefined;
+    }
+
+    const resultWithoutPassword = result[0];
+    delete resultWithoutPassword.dataValues.password;
+
+    return JSON.stringify(resultWithoutPassword, null, 2);
+}
+
+module.exports = {initializeUsersTable, registerUser, loginUser, getUsers, getOneUser};
