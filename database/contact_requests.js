@@ -58,7 +58,7 @@ async function getOneContactRequest(id) {
     if (contactRequests.length === 0) {
         return undefined;
     }
-    return JSON.stringify(contactRequests, null, 2);
+    return JSON.stringify(contactRequests[0], null, 2);
 }
 
 async function addContactRequest(params) {

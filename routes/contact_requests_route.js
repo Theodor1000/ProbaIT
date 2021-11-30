@@ -1,5 +1,6 @@
 const express = require('express');
 const {body, validationResult} = require('express-validator');
+const {formatErrorMessage} = require ('./utils');
 const {getContactRequests, addContactRequest, getOneContactRequest, updateContactRequest, deleteContactRequest} = require('../database/contact_requests');
 
 const router = express.Router();
@@ -123,9 +124,5 @@ router.delete(
 
         res.status(200).send('Success!');
     });
-
-function formatErrorMessage(errors) {
-    return errors.array().reduce((soFar, error) => soFar.concat(error.msg + '\n'), '');
-}
 
 module.exports = router;

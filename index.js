@@ -1,8 +1,11 @@
 const express = require('express');
 const {Sequelize} = require('sequelize');
-const {initializeContactRequestsTable} = require('./database/contact_requests');
 const contactRequestsRouter = require('./routes/contact_requests_route');
+const usersRouter = require('./routes/users_route');
+const authRouter = require('./routes/auth_route');
 const bodyParser = require('body-parser');
+const {initializeContactRequestsTable} = require('./database/contact_requests');
+const {initializeUsersTable} = require("./database/users");
 
 const sequelizeForDatabaseCreation = new Sequelize('', 'root', 'root', {
     host: 'localhost',
@@ -38,6 +41,7 @@ let sequelize;
 
     try {
         await initializeContactRequestsTable(sequelize);
+        await initializeUsersTable(sequelize);
     } catch (error) {
         console.error('Table initialization failed: ', error);
     }
@@ -51,5 +55,7 @@ app.listen(port, () => {
 
 app.use(bodyParser.json());
 app.use('/contact-requests', contactRequestsRouter);
+app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 
 module.exports = {sequelize};
