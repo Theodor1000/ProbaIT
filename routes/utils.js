@@ -5,13 +5,13 @@ function formatErrorMessage(errors) {
 }
 
 function generateAccessToken(email) {
-    return jwt.sign(email, TOKEN_SECRET, { expiresIn: '30s' });
+    return jwt.sign(email, TOKEN_SECRET, { expiresIn: '1000s' });
 }
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-console.log(authHeader);
+
     if (token == null) {
         res.status(401).send('authentication required');
         return;

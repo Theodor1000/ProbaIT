@@ -93,5 +93,14 @@ async function getOneUser(id) {
 
     return JSON.stringify(resultWithoutPassword, null, 2);
 }
+async function deleteUser(id) {
+    const exists = await getOneUser(id);
+    if (exists === undefined) {
+        return undefined;
+    }
 
-module.exports = {initializeUsersTable, registerUser, loginUser, getUsers, getOneUser};
+    const result = await User.destroy({where: {id}});
+    return JSON.stringify(result, null, 2);
+}
+
+module.exports = {initializeUsersTable, registerUser, loginUser, getUsers, getOneUser, deleteUser};
