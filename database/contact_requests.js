@@ -1,9 +1,9 @@
-const {DataTypes} = require('sequelize');
+const {DataTypes, Model} = require('sequelize');
 
-const CONTACT_REQUESTS_TABLE = 'contact_requests';
+class ContactRequest extends Model {}
 
-async function initializeContactRequestsTable(queryInterface) {
-    await queryInterface.createTable(CONTACT_REQUESTS_TABLE, {
+async function initializeContactRequestsTable(sequelize) {
+    ContactRequest.init({
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -26,7 +26,23 @@ async function initializeContactRequestsTable(queryInterface) {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+    }, {
+        sequelize,
+        modelName: 'ContactRequest',
+    });
+    await ContactRequest.sync();
+}
+
+async function getContactRequests() {
+    const contactRequests = await ContactRequest.findAll();
+    return JSON.stringify(contactRequests, null, 2);
+}
+async function addContactRequest(params) {
+    await ContactRequest.create({
+        name: params.name,
+        email: params.email,
+        message: params.message
     });
 }
 
-module.exports = {initializeContactRequestsTable};
+module.exports = {initializeContactRequestsTable, getContactRequests, addContactRequest};
