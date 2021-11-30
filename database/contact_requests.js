@@ -34,8 +34,13 @@ async function initializeContactRequestsTable(sequelize) {
     await ContactRequest.sync();
 }
 
-async function getContactRequests() {
-    const contactRequests = await ContactRequest.findAll();
+async function getContactRequests(sortBy, order) {
+    let contactRequests;
+    if (sortBy === undefined || order === undefined) {
+        contactRequests = await ContactRequest.findAll();
+    } else {
+        contactRequests = await ContactRequest.findAll({order: [[sortBy, order]]});
+    }
     return JSON.stringify(contactRequests, null, 2);
 }
 

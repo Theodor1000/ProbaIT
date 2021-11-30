@@ -5,7 +5,23 @@ const {getContactRequests, addContactRequest, getOneContactRequest, updateContac
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const result = await getContactRequests();
+    const sortBy = req.query.sortBy;
+    const order = req.query.order;
+
+    if ((sortBy === undefined && order !== undefined) || (sortBy !== undefined && order === undefined)) {
+        res.status(400).send('Both sortBy and order must be provided!');
+        return;
+    }
+    if (sortBy !== undefined && sortBy !== 'id' && sortBy !== 'name' && sortBy !== 'email' && sortBy !== 'message') {
+        res.status(400).send('sortBy must be one of: name, email or message');
+        return;
+    }
+    if (order !== undefined && order !== 'ASC' && order !== 'DESC') {
+        res.status(400).send('order must be one of: ASC or DESC');
+        return;
+    }
+
+    const result = await getContactRequests(sortBy, order);
     res.status(200).send(result);
 });
 

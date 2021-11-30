@@ -1,7 +1,7 @@
 const express = require('express');
 const {Sequelize} = require('sequelize');
 const {initializeContactRequestsTable} = require('./database/contact_requests');
-const contactRequestsRouter = require('./routes/conact_requests_route');
+const contactRequestsRouter = require('./routes/contact_requests_route');
 const bodyParser = require('body-parser');
 
 const sequelizeForDatabaseCreation = new Sequelize('', 'root', 'root', {
