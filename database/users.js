@@ -114,4 +114,16 @@ async function updateUser(id, params) {
     return JSON.stringify(result, null, 2);
 }
 
-module.exports = {initializeUsersTable, registerUser, loginUser, getUsers, getOneUser, deleteUser, updateUser};
+async function getUserByEmail(email) {
+    const result = await User.findAll({where: {email}});
+    if (result.length === 0) {
+        return undefined;
+    }
+
+    const resultWithoutPassword = result[0];
+    delete resultWithoutPassword.dataValues.password;
+
+    return resultWithoutPassword.dataValues;
+}
+
+module.exports = {initializeUsersTable, registerUser, loginUser, getUsers, getOneUser, deleteUser, updateUser, User, getUserByEmail};
