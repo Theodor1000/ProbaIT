@@ -61,4 +61,24 @@ async function addTutoringClass(description, subject, userId) {
     return JSON.stringify(result, null, 2);
 }
 
-module.exports = {initializeTutoringClassTable, TutoringClass, getOneTutoringClass, getTutoringClass, addTutoringClass};
+async function updateTutoringClass(id, description) {
+    const exists = getOneTutoringClass(id);
+    if (exists === undefined) {
+        return undefined;
+    }
+
+    const result = await TutoringClass.update({description}, {where: {id}});
+    return JSON.stringify(result, null, 2);
+}
+
+async function deleteTutoringClass(id) {
+    const exists = getOneTutoringClass(id);
+    if (exists === undefined) {
+        return undefined;
+    }
+
+    const result = await TutoringClass.destroy({where: {id}});
+    return JSON.stringify(result, null, 2);
+}
+
+module.exports = {deleteTutoringClass, updateTutoringClass, initializeTutoringClassTable, TutoringClass, getOneTutoringClass, getTutoringClass, addTutoringClass};
