@@ -33,8 +33,13 @@ async function initializeTutoringClassTable(sequelize) {
     User.hasMany(TutoringClass, {foreignKey: 'teacher_id', onDelete: 'cascade', hooks: true});
 }
 
-async function getTutoringClass() {
-    const result = await TutoringClass.findAll();
+async function getTutoringClass(subject) {
+    let result;
+    if (subject === undefined) {
+        result = await TutoringClass.findAll();
+    } else {
+        result = await TutoringClass.findAll({where: {subject}});
+    }
     return JSON.stringify(result, null, 2);
 }
 
@@ -47,4 +52,13 @@ async function getOneTutoringClass(id) {
     return JSON.stringify(result[0], null, 2);
 }
 
-module.exports = {initializeTutoringClassTable, TutoringClass, getOneTutoringClass, getTutoringClass};
+async function addTutoringClass(description, subject, userId) {
+    const result = await TutoringClass.create({
+        description,
+        subject,
+        teacher_id: userId,
+    });
+    return JSON.stringify(result, null, 2);
+}
+
+module.exports = {initializeTutoringClassTable, TutoringClass, getOneTutoringClass, getTutoringClass, addTutoringClass};
