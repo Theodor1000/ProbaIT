@@ -11,6 +11,7 @@ const {initializeUsersTable} = require("./database/users");
 const {initializeReviewsTable} = require("./database/reviews");
 const {sync} = require("./database/sync");
 const {initializeTutoringClassTable} = require("./database/tutoring_class");
+const {initializeEnrolmentTable} = require("./database/enrolment");
 
 const sequelizeForDatabaseCreation = new Sequelize('', 'root', 'root', {
     host: 'localhost',
@@ -49,6 +50,7 @@ let sequelize;
         await initializeUsersTable(sequelize);
         await initializeReviewsTable(sequelize);
         await initializeTutoringClassTable(sequelize);
+        await initializeEnrolmentTable(sequelize);
         await sync();
     } catch (error) {
         console.error('Table initialization failed: ', error);

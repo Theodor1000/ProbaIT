@@ -6,8 +6,6 @@ const {getTutoringClass, getOneTutoringClass, addTutoringClass, updateTutoringCl
 
 const router = express.Router();
 
-module.exports = router;
-
 router.get('/', async (req, res) => {
     const result = await getTutoringClass(req.query.subject);
     res.status(200).send(result);
@@ -141,3 +139,5 @@ router.delete(
 
         res.status(200).send('Success!');
     });
+
+module.exports = router;
