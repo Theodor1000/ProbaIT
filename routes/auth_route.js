@@ -1,11 +1,10 @@
 const express = require('express');
 const {body, validationResult} = require('express-validator');
-const {formatErrorMessage, generateAccessToken} = require ('./utils');
+const {formatErrorMessage, generateAccessToken, SALT_ROUNDS} = require ('./utils');
 const {registerUser, loginUser} = require('../database/users');
 const bcrypt = require ('bcrypt');
 
 const router = express.Router();
-const saltRounds = 10;
 
 router.post(
     '/register',
@@ -63,7 +62,7 @@ router.post(
         }
 
         const body = req.body;
-        await bcrypt.hash(body.password, saltRounds, async function(err, hash) {
+        await bcrypt.hash(body.password, SALT_ROUNDS, async function(err, hash) {
             body.password = hash;
 
             const result = await registerUser(body);

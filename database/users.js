@@ -93,6 +93,7 @@ async function getOneUser(id) {
 
     return JSON.stringify(resultWithoutPassword, null, 2);
 }
+
 async function deleteUser(id) {
     const exists = await getOneUser(id);
     if (exists === undefined) {
@@ -103,4 +104,14 @@ async function deleteUser(id) {
     return JSON.stringify(result, null, 2);
 }
 
-module.exports = {initializeUsersTable, registerUser, loginUser, getUsers, getOneUser, deleteUser};
+async function updateUser(id, params) {
+    const exists = await getOneUser(id);
+    if (exists === undefined) {
+        return undefined;
+    }
+
+    const result = await User.update(params, {where: {id}});
+    return JSON.stringify(result, null, 2);
+}
+
+module.exports = {initializeUsersTable, registerUser, loginUser, getUsers, getOneUser, deleteUser, updateUser};

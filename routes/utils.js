@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const {getOneUser} = require("../database/users");
 
 function formatErrorMessage(errors) {
     return errors.array().reduce((soFar, error) => soFar.concat(error.msg + '\n'), '');
@@ -28,6 +29,19 @@ function authenticateToken(req, res, next) {
     });
 }
 
-const TOKEN_SECRET = '6e1e24c3b69b47a04648412f6137a7ee3716e4250e0a75713faa80603cd49cdb4c42b6061dc98ac4a37f73daea94bd9741770716cb4a89bfc6fd847ee7dce075';
+async function checkAuthorized(email, id) {
+    const user = await getOneUser(id);
+    if (user === undefined) {
+        return 'not_found';
+    }
+    const userData = JSON.parse(user);
+    if (userData.email !== email) {
+        return 'forbidden';
+    }
+    return 'ok';
+}
 
-module.exports = {formatErrorMessage, generateAccessToken, authenticateToken, TOKEN_SECRET};
+const TOKEN_SECRET = '6e1e24c3b69b47a04648412f6137a7ee3716e4250e0a75713faa80603cd49cdb4c42b6061dc98ac4a37f73daea94bd9741770716cb4a89bfc6fd847ee7dce075';
+const SALT_ROUNDS = 10;
+
+module.exports = {formatErrorMessage, generateAccessToken, authenticateToken, checkAuthorized, TOKEN_SECRET, SALT_ROUNDS};
