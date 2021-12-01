@@ -24,10 +24,12 @@ async function initializeReviewsTable(sequelize) {
         modelName: 'Review',
         timestamps: false,
     });
-    await Review.sync();
 
-    Review.belongsTo(User, {foreignKey: 'user_id'});
-    User.hasMany(Review, {foreignKey: 'user_id'});
+    Review.belongsTo(User, {foreignKey: 'user_id', onDelete: 'cascade', hooks: true});
+    User.hasMany(Review, {foreignKey: 'user_id', onDelete: 'cascade', hooks: true});
+
+    await User.sync();
+    await Review.sync();
 }
 
 async function getReviews() {

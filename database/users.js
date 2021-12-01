@@ -36,7 +36,6 @@ async function initializeUsersTable(sequelize) {
         modelName: 'User',
         timestamps: false,
     });
-    await User.sync();
 }
 
 async function registerUser(params) {
@@ -99,9 +98,12 @@ async function deleteUser(id) {
     if (exists === undefined) {
         return undefined;
     }
-
+try {
     const result = await User.destroy({where: {id}});
-    return JSON.stringify(result, null, 2);
+    return JSON.stringify(result, null, 2);}
+    catch(er) {
+        console.log(er);
+    }
 }
 
 async function updateUser(id, params) {
