@@ -5,6 +5,7 @@ const usersRouter = require('./routes/users_route');
 const authRouter = require('./routes/auth_route');
 const reviewsRouter = require('./routes/reviews_route');
 const tutoringClassRouter = require('./routes/tutoring_classes_route');
+const enrolmentRouter = require('./routes/enrolment_router');
 const bodyParser = require('body-parser');
 const {initializeContactRequestsTable} = require('./database/contact_requests');
 const {initializeUsersTable} = require("./database/users");
@@ -69,5 +70,6 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/reviews', reviewsRouter);
 app.use('/tutoring-classes', tutoringClassRouter);
+app.use('/tutoring-class', enrolmentRouter);
 
 module.exports = {sequelize};

@@ -33,4 +33,31 @@ async function initializeEnrolmentTable(sequelize) {
     User.hasMany(Enrolment, {foreignKey: 'student_id', onDelete: 'cascade', hooks: true});
 }
 
-module.exports = {Enrolment, initializeEnrolmentTable};
+async function checkIfEntryExists(userId, tutoringId) {
+    const result = await Enrolment.findAll({where: {
+        student_id: userId,
+        tutoring_class_id: tutoringId,
+    }});
+    return result.length > 0;
+}
+
+async function addEnrolment(userId, tutoringId) {
+    let result;
+
+    try {
+        result = await Enrolment.create({
+            student_id: userId,
+            tutoring_class_id: tutoringId,
+        });
+    } catch (error) {
+        if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+            result = undefined;
+        }
+    }
+    if (result === undefined) {
+        return undefined;
+    }
+    return JSON.stringify(result, null, 2);
+}
+
+module.exports = {Enrolment, initializeEnrolmentTable, addEnrolment, checkIfEntryExists};
