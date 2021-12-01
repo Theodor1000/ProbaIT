@@ -17,7 +17,7 @@ async function initializeReviewsTable(sequelize) {
         },
         user_id: {
             type: DataTypes.INTEGER,
-
+            allowNull: false,
         }
     }, {
         sequelize,
@@ -27,9 +27,6 @@ async function initializeReviewsTable(sequelize) {
 
     Review.belongsTo(User, {foreignKey: 'user_id', onDelete: 'cascade', hooks: true});
     User.hasMany(Review, {foreignKey: 'user_id', onDelete: 'cascade', hooks: true});
-
-    await User.sync();
-    await Review.sync();
 }
 
 async function getReviews() {
@@ -74,4 +71,4 @@ async function deleteReview(id) {
     return JSON.stringify(result, null, 2);
 }
 
-module.exports = {initializeReviewsTable, getOneReview, getReviews, addReview, updateReview, deleteReview};
+module.exports = {Review, initializeReviewsTable, getOneReview, getReviews, addReview, updateReview, deleteReview};

@@ -31,7 +31,6 @@ async function initializeContactRequestsTable(sequelize) {
         modelName: 'ContactRequest',
         timestamps: false,
     });
-    await ContactRequest.sync();
 }
 
 async function getContactRequests(sortBy, order, filterBy) {
@@ -88,4 +87,4 @@ async function deleteContactRequest(id) {
     return JSON.stringify(result, null, 2);
 }
 
-module.exports = {initializeContactRequestsTable, getContactRequests, addContactRequest, getOneContactRequest, updateContactRequest, deleteContactRequest};
+module.exports = {ContactRequest, initializeContactRequestsTable, getContactRequests, addContactRequest, getOneContactRequest, updateContactRequest, deleteContactRequest};
