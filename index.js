@@ -14,7 +14,10 @@ const {sync} = require("./database/sync");
 const {initializeTutoringClassTable} = require("./database/tutoring_class");
 const {initializeEnrolmentTable} = require("./database/enrolment");
 
-const sequelizeForDatabaseCreation = new Sequelize('', 'root', 'root', {
+const DB_USER = 'root';
+const DB_PASSWORD = 'root';
+
+const sequelizeForDatabaseCreation = new Sequelize('', DB_USER, DB_PASSWORD, {
     host: 'localhost',
     dialect: 'mysql',
     logging: false,
